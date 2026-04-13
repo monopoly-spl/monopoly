@@ -1,0 +1,2 @@
+matplotlib==3.10.8
+z3_solver==4.15.4.0

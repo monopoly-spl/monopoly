@@ -655,18 +655,3 @@ all_inheritances = [RegionInheritance, VertexInheritance1, VertexInheritance2, N
 
 gpl_ = vMetamodel("GPL", classes = all_classes, enums=[],inheritance=all_inheritances)
 
-GPL = VariationalMetamodel(features=gplFeatures,model=gpl_,featModel=GPLFeatModelConstraints)
-
-s = Solver()
-
-# print(count_models(s, gplFeatures, GPLFeatModelConstraints))
-def atLeast2ClassesWithAtLeast4Fields(mm : Metamodel):
-    count = 0
-    for c in mm.classes: 
-        if len(c.references) + len(c.attributes) + len(c.operations) >= 4:
-            count += 1 
-    return count >= 2
-
-myExampleAnalysis = AnalysisInstance(GPL, atLeast2ClassesWithAtLeast4Fields)
-
-myExampleAnalysis.analyze()

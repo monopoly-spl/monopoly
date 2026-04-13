@@ -14,10 +14,6 @@ class Multiplicity:
     lower: int = 0
     upper: Optional[int] = None  # None = *
 
-# ---------------------------
-# FEATURES
-# ---------------------------
-
 @dataclass
 class Attribute:
     name: str
@@ -33,9 +29,6 @@ class Reference:
 
 Feature = Union[Attribute, Reference]
 
-# ---------------------------
-# OPERATIONS & CONSTRAINTS
-# ---------------------------
 
 @dataclass
 class Operation:
@@ -49,9 +42,6 @@ class Invariant:
     name: str
     expression: str
 
-# ---------------------------
-# CLASS
-# ---------------------------
 
 @dataclass
 class MetaClass:
@@ -62,9 +52,6 @@ class MetaClass:
     invariants: List[Invariant] = field(default_factory=list)
     superclasses: List[Tuple[str,str]] = field(default_factory=list)
 
-# ---------------------------
-# ENUM
-# ---------------------------
 
 @dataclass
 class EnumLiteral:
@@ -132,3 +119,10 @@ def pretty_print_package(pkg):
         print("Inheritances:")
         for inh in pkg.inheritance:
             print(inh)
+
+def atLeast2ClassesWithAtLeast4Fields(mm : Metamodel):
+    count = 0
+    for c in mm.classes: 
+        if len(c.references) + len(c.attributes) + len(c.operations) >= 4:
+            count += 1 
+    return count >= 2

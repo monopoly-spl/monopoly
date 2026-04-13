@@ -1,13 +1,15 @@
-import csv 
+import csv
 from matplotlib import pyplot as plt
 
+
 ## RQ1 Plotting
-def plot_results(csv_file):
+def plot_results(csv_file, filename):
+    plt.figure(figsize=(9, 4.8))
     plt.rcParams.update({
-    "font.size": 12,        
-    "axes.labelsize": 14,  
-    "xtick.labelsize": 12,
-    "ytick.labelsize": 12
+    "font.size": 16,
+    "axes.labelsize": 18,
+    "xtick.labelsize": 15,
+    "ytick.labelsize": 15
     })
     iterations = []
     cumulative_values = []
@@ -30,26 +32,33 @@ def plot_results(csv_file):
 
     plt.plot(iterations, cumulative_values, linestyle='-', color='black', alpha=0.6)
 
-    # markers depend on analysis returning true/false
-    for x, y, is_true in zip(iterations, cumulative_values, styles):
-        if is_true:
-            plt.scatter(x, y, marker='o', color='black')  # filled
-        else:
-            plt.scatter(x, y, marker='o', facecolors='none', edgecolors='black')  # empty
+    true_x = [x for x, s in zip(iterations, styles) if s]
+    true_y = [y for y, s in zip(cumulative_values, styles) if s]
 
-    plt.xlabel("Number of Analysis Invocations")
+    false_x = [x for x, s in zip(iterations, styles) if not s]
+    false_y = [y for y, s in zip(cumulative_values, styles) if not s]
+
+    plt.plot(iterations, cumulative_values, linestyle='-', color='black', alpha=0.6)
+    plt.scatter(true_x, true_y, marker='x', color='green', label="Satsfied")
+    plt.scatter(false_x, false_y, marker='o', facecolors='none', edgecolors='red', label="Violated")
+    plt.legend(loc="lower right")
+    plt.xlabel("Iteration")
     plt.ylabel("Cumulative Products Analyzed")
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig(filename)
+    plt.close()
+
 
 ## RQ2 Plotting
-def plot_generalization_power(csv_file):
+def plot_generalization_power(csv_file, filename):
+
     plt.rcParams.update({
-    "font.size": 12,        # base size
-    "axes.labelsize": 14,   # axis labels
-    "xtick.labelsize": 12,
-    "ytick.labelsize": 12
+    "font.size": 16,
+    "axes.labelsize": 18,
+    "xtick.labelsize": 15,
+    "ytick.labelsize": 15
     })
     iterations = []
     closure_values = []
@@ -70,15 +79,20 @@ def plot_generalization_power(csv_file):
             closure_values.append(closure_size)
             styles.append(result)
 
-    # markers depend on analysis returning true/false
-    for x, y, is_true in zip(iterations, closure_values, styles):
-        if is_true:
-            plt.scatter(x, y, marker='o', color='black')  
-        else:
-            plt.scatter(x, y, marker='o', facecolors='none', edgecolors='black')  
+    true_x = [x for x, s in zip(iterations, styles) if s]
+    true_y = [y for y, s in zip(closure_values, styles) if s]
 
-    plt.xlabel("Number of Analysis Invocations")
-    plt.ylabel("Number of Applicable Products")
+    false_x = [x for x, s in zip(iterations, styles) if not s]
+    false_y = [y for y, s in zip(closure_values, styles) if not s]
+
+    plt.scatter(true_x, true_y, marker='x', color='green', label="Satisfied")
+    plt.scatter(false_x, false_y, marker='o', facecolors='none', edgecolors='red', label="Violated")
+
+    plt.xlabel("Iteration")
+    plt.ylabel("Number of Pruned Configurations")
     plt.grid(True)
+    plt.legend(loc="upper right")
     plt.tight_layout()
-    plt.show()
+    # plt.show()
+    plt.savefig(filename)
+    plt.close()

@@ -1,8 +1,5 @@
 from z3 import Solver,BoolRef
 
-## Various helper methods
-
-# Helper function  
 def checkSatWith(solver : Solver,constraints : list[BoolRef]) -> str:
     """
     Add `constraints` to the assertion stack of `solver`, checks for satisfiability, and returns the result. 
